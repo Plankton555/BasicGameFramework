@@ -11,85 +11,81 @@ import javax.swing.JFrame;
  * the connection between game and view. This is the window frame.
  * 
  * @author Plankton555
- * @version v0.3 (2012-02-14)
+ * @version v0.3 (2012-06-06)
  */
 @SuppressWarnings("serial")
 public class GameController extends JFrame implements Runnable {
 
 	/** Reference to the view. */
-	private GameView view;
+	private final AbstractGameView view;
 	/** Reference to the game. */
-	private AbstractGame game;
-	
+	private final AbstractGame game;
+
 	/** Determines whether the game should be paused or not. */
 	private boolean pause;
-	
+
 	/** Determines the update interval. */
-	private int millisecondsPerFrame;
-	
-	private Image screenBuffer;
-	
+	private final int msPerFrame;
+
+	private final Image screenBuffer;
+
 	/** The number of times that update will run per cycle. */
 	private int fastFwd = 1;
-	
+
 	/**
 	 * Creates the controller.
-	 * @param game The game to use.
-	 * @param view The view to use.
-	 * @param msPerFrame Time between update/draw calls.
+	 * 
+	 * @param game
+	 *            The game to use.
+	 * @param view
+	 *            The view to use.
+	 * @param msPerFrame
+	 *            Time between update/draw calls.
 	 */
-	public GameController(AbstractGame game, int msPerFrame)
-	{
+	public GameController(AbstractGame game, int msPerFrame) {
 		super(game.getGameName());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setLayout(new BorderLayout());	
+		this.setLayout(new BorderLayout());
 		this.add(game.getGamePanel(), BorderLayout.CENTER);
 		this.pack();
-		this.setLocationRelativeTo(null); //Centers the window
+		this.setLocationRelativeTo(null); // Centers the window
 		this.setVisible(true);
 		this.setResizable(false);
-		
+
 		this.game = game;
 		this.view = game.getGameView();
-		this.millisecondsPerFrame = msPerFrame;
-		
+		this.msPerFrame = msPerFrame;
+
 		this.screenBuffer = createImage(view.getWidth(), view.getHeight());
-		
+
 		this.game.setGameController(this);
 		this.game.initialize();
 		this.game.loadContent();
 		pause = false;
 	}
-	
+
 	/**
 	 * Contains the game loop.
 	 */
 	@Override
-	public void run()
-	{
-		while (true)
-		{
+	public void run() {
+		while (true) {
 			long startTimeNano = System.nanoTime();
-			if (!pause )
-			{
-				for (int i=0; i<fastFwd; i++)
-				{
+			if (!pause) {
+				for (int i = 0; i < fastFwd; i++) {
 					game.update(view.getSize());
 				}
 				clearAndDraw();
 			}
 			long endTimeNano = System.nanoTime() - startTimeNano;
-			try
-			{
+			try {
 				// endTime is in nanoSeconds
-				if (endTimeNano < millisecondsPerFrame*1000000)
-				{
-					Thread.sleep(millisecondsPerFrame - endTimeNano/1000000, (int)(endTimeNano%1000000));
+				if (endTimeNano < msPerFrame * 1000000) {
+					Thread.sleep(msPerFrame - endTimeNano / 1000000,
+							(int) (endTimeNano % 1000000));
 				}
-			}
-			catch (Exception e)
-			{
-				System.out.println("Exception "+e);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -98,17 +94,17 @@ public class GameController extends JFrame implements Runnable {
 	 * Clears the screen and draws the next one.
 	 */
 	private void clearAndDraw() {
-		
+
 		Graphics g = screenBuffer.getGraphics();
 		g.setColor(view.getBackground());
 		g.fillRect(0, 0, view.getWidth(), view.getHeight());
 		g.setColor(Color.BLACK);
-		
+
 		game.draw(g, view.getSize());
-		
+
 		view.getGraphics().drawImage(screenBuffer, 0, 0, null);
 	}
-	
+
 	/**
 	 * Toggles the pause function.
 	 */
@@ -124,7 +120,8 @@ public class GameController extends JFrame implements Runnable {
 	}
 
 	/**
-	 * @param fastForward The fast forward speed.
+	 * @param fastForward
+	 *            The fast forward speed.
 	 */
 	public void setFastForward(int fastForward) {
 		this.fastFwd = Math.max(1, fastForward);
@@ -133,7 +130,7 @@ public class GameController extends JFrame implements Runnable {
 	/**
 	 * @return The view.
 	 */
-	public GameView getView() {
+	public AbstractGameView getView() {
 		return view;
 	}
 }
