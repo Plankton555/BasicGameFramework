@@ -1,4 +1,4 @@
-package se.chalmers.pebjorn.basicgameframework;
+package se.chalmers.pebjorn.bgf;
 
 /**
  * Call the static method to start the game.

@@ -1,4 +1,4 @@
-package se.chalmers.pebjorn.basicgameframework;
+package se.chalmers.pebjorn.bgf;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
