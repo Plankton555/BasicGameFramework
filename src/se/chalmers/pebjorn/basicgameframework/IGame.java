@@ -6,12 +6,12 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
- * An abstract game class. To use this framework, extend this class.
+ * An abstract game class. To use this framework, implement this interface.
  * 
  * @author Plankton555
  * @version v0.3 (2012-06-06)
  */
-public abstract class AbstractGame {
+public interface IGame {
 
 	/**
 	 * Gets the name of the game.

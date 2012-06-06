@@ -19,7 +19,7 @@ public class GameController extends JFrame implements Runnable {
 	/** Reference to the view. */
 	private final AbstractGameView view;
 	/** Reference to the game. */
-	private final AbstractGame game;
+	private final IGame game;
 
 	/** Determines whether the game should be paused or not. */
 	private boolean pause;
@@ -42,7 +42,7 @@ public class GameController extends JFrame implements Runnable {
 	 * @param msPerFrame
 	 *            Time between update/draw calls.
 	 */
-	public GameController(AbstractGame game, int msPerFrame) {
+	public GameController(IGame game, int msPerFrame) {
 		super(game.getGameName());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
@@ -110,6 +110,14 @@ public class GameController extends JFrame implements Runnable {
 	 */
 	public void togglePause() {
 		pause = !pause;
+	}
+	
+	/**
+	 * @return true if the game is paused, otherwise false.
+	 */
+	public boolean isPaused()
+	{
+		return pause;
 	}
 
 	/**

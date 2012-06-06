@@ -16,9 +16,8 @@ public class BasicGameMain {
 	 * @param msPerFrame
 	 *            Update interval in milliseconds.
 	 */
-	public static void startGame(AbstractGame game, int msPerFrame) {
+	public static void startGame(IGame game, int msPerFrame) {
 		GameController gameController = new GameController(game, msPerFrame);
 		new Thread(gameController).start();
 	}
-
 }
